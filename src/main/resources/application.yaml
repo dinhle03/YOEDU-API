@@ -1,6 +1,6 @@
 spring:
   application:
-    name: day1
+    name: yoot_day1
 
   profiles:
     active: ${APP_PROFILE:dev}

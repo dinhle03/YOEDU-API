@@ -3,6 +3,7 @@ package com.example.yootday1.controllers;
 import com.example.yootday1.common.ApiResponse;
 import com.example.yootday1.domain.entity.Course;
 import com.example.yootday1.service.CourseService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,5 +35,14 @@ public class CourseController {
     @PostMapping
     public ResponseEntity<ApiResponse<Course>> create(@RequestBody Course course){
         return ResponseEntity.ok(ApiResponse.success(courseService.save(course)));
+    }
+    @PutMapping("{id}")
+    public ResponseEntity<ApiResponse<Course>> update(@PathVariable("id") Long id, @Valid @RequestBody Course course){
+        return ResponseEntity.ok(ApiResponse.success(courseService.updateCourse(id, course)));
+    }
+    @DeleteMapping("{id}")
+    public ResponseEntity<ApiResponse<Void>> detele(@PathVariable("id") Long id){
+        courseService.deleteCourse(id);
+        return ResponseEntity.ok(ApiResponse.successMessage("Xoa Thanh cong"));
     }
 }
