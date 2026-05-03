@@ -1,20 +1,55 @@
 package com.example.yootday1.domain.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.yootday1.domain.AuditableEntity;
+import com.example.yootday1.domain.enums.Gender;
+import com.example.yootday1.domain.enums.StudentStatus;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 @Entity
 @Data
-public class Student {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+@Table(name = "students")
+public class Student extends AuditableEntity {
 
-    private String fullname;
+    @Column(name = "student_code", nullable = false, unique = true, length = 20)
+    private String studentCode;
 
-    private String email;
+    @Column(name = "full_name", nullable = false, length = 100)
+    private String fullName;
 
+    @Column(name = "date_of_birth")
+    private LocalDate dateOfBirth;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
+    private Gender gender = Gender.OTHER;
+
+    @Column(name = "grade_level", length = 30)
+    private String gradeLevel;
+
+    @Column(name = "school_name", length = 100)
+    private String schoolName;
+
+    @Column(length = 20)
     private String phone;
+
+    @Column(length = 255)
+    private String description;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "parent_id")
+    private Parent parent;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private StudentStatus status = StudentStatus.ACTIVE;
+
+    @Column(name = "latest_score", precision = 5, scale = 2)
+    private BigDecimal latestScore = BigDecimal.ZERO;
+
+    @Column(length = 255)
+    private String note;
 }

@@ -6,16 +6,26 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "parents")
-@Data
 public class Parent extends AuditableEntity {
-    @Column(columnDefinition = "varchar(100)")
+
+    @Column(name = "full_name", nullable = false, length = 100)
     private String fullName;
-    @Column(columnDefinition = "varchar(20)")
+
+    @Column(nullable = false, unique = true, length = 20)
     private String phone;
-    @Column(columnDefinition = "varchar(100)")
+
+    @Column(length = 100)
     private String email;
-    @Column(columnDefinition = "varchar(255)")
+
+    @Column(length = 255)
     private String address;
+
+    @Column(length = 20)
+    private String relationship;
+
+    @Column(length = 10)
+    private String gender;
 }
