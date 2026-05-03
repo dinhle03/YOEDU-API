@@ -32,7 +32,7 @@ public class StudentsController {
 
     }
     @PostMapping
-    public ResponseEntity<StudentResponse> create(StudentUpsertRequest req){
+    public ResponseEntity<StudentResponse> create(@Valid @RequestBody StudentUpsertRequest req){
         return ResponseEntity.ok(studentService.create(req));
     }
     @PutMapping("/{id}")
