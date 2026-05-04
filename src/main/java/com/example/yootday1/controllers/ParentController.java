@@ -36,11 +36,11 @@ public class ParentController {
     }
 
     @PostMapping
-    public ResponseEntity<ParentResponse> create(@RequestBody ParentUpsertRequest req){
+    public ResponseEntity<ParentResponse> create(@Valid @RequestBody ParentUpsertRequest req){
         return ResponseEntity.ok(parentService.create(req));
     }
     @PutMapping("/{id}")
-    public ResponseEntity<ParentResponse> update(@PathVariable Long id, @RequestBody ParentUpsertRequest req){
+    public ResponseEntity<ParentResponse> update(@PathVariable Long id,@Valid @RequestBody ParentUpsertRequest req){
         return ResponseEntity.ok(parentService.update(id,req));
     }
 
