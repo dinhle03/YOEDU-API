@@ -1,8 +1,13 @@
 package com.example.yootday1.controllers;
 
 import com.example.yootday1.common.ApiResponse;
+import com.example.yootday1.common.exception.NotFoundException;
 import com.example.yootday1.domain.entity.Course;
 import com.example.yootday1.domain.entity.Parent;
+import com.example.yootday1.dto.parent.ParentResponse;
+import com.example.yootday1.dto.parent.ParentUpsertRequest;
+import com.example.yootday1.dto.student.StudentResponse;
+import com.example.yootday1.dto.student.StudentUpsertRequest;
 import com.example.yootday1.service.ParentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,32 +24,29 @@ public class ParentController {
     private final ParentService parentService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Parent>>> getParent(){
-        return ResponseEntity.ok(ApiResponse.success(parentService.findAll()));
+    public ResponseEntity<List<ParentResponse>> findAll(){
+        return ResponseEntity.ok(parentService.findAll());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ApiResponse<Parent>> getParentById(@PathVariable("id") Long id){
-        Optional<Parent> parent = parentService.findById(id);
-        if (parent.isPresent()){
-            return ResponseEntity.ok((ApiResponse.success(parent.get())));
-        }else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<ParentResponse> findById(@PathVariable Long id){
+        return parentService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(()->ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Parent>> create(@RequestBody Parent parent){
-        return ResponseEntity.ok(ApiResponse.success(parentService.save(parent)));
+    public ResponseEntity<ParentResponse> create(@RequestBody ParentUpsertRequest req){
+        return ResponseEntity.ok(parentService.create(req));
     }
-    @PutMapping("{id}")
-    public ResponseEntity<ApiResponse<Parent>> update(@PathVariable("id") Long id, @Valid @RequestBody Parent parent){
-        return ResponseEntity.ok(ApiResponse.success(parentService.updateParent(id,parent)));
+    @PutMapping("/{id}")
+    public ResponseEntity<ParentResponse> update(@PathVariable Long id, @RequestBody ParentUpsertRequest req){
+        return ResponseEntity.ok(parentService.update(id,req));
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<ApiResponse<Void>> detele(@PathVariable("id") Long id){
-        parentService.deleteParent(id);
-        return ResponseEntity.ok(ApiResponse.successMessage("Xoa Thanh cong"));
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) throws  NotFoundException{
+        parentService.delete(id);
+        return ResponseEntity.ok().build();
     }
 }

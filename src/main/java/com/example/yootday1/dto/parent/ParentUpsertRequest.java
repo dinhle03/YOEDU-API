@@ -1,19 +1,14 @@
 package com.example.yootday1.dto.parent;
 
 import com.example.yootday1.domain.enums.Gender;
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ParentResponse {
-
-    private Long id;
+public class ParentUpsertRequest {
 
     private String fullName;
 
@@ -26,8 +21,4 @@ public class ParentResponse {
     private String relationship;
 
     private Gender gender = Gender.OTHER;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 }
