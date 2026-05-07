@@ -1,8 +1,13 @@
 package com.example.yootday1.controllers;
 
 import com.example.yootday1.common.ApiResponse;
+import com.example.yootday1.common.exception.NotFoundException;
 import com.example.yootday1.domain.entity.Parent;
 import com.example.yootday1.domain.entity.Teacher;
+import com.example.yootday1.dto.parent.ParentResponse;
+import com.example.yootday1.dto.parent.ParentUpsertRequest;
+import com.example.yootday1.dto.teacher.TeacherResponse;
+import com.example.yootday1.dto.teacher.TeacherUpsertRequest;
 import com.example.yootday1.service.TeacherService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,32 +24,29 @@ public class TeacherController {
     private final TeacherService teacherService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Teacher>>> getTeacher(){
-        return ResponseEntity.ok(ApiResponse.success(teacherService.findAll()));
+    public ResponseEntity<List<TeacherResponse>> findAll(){
+        return ResponseEntity.ok(teacherService.findAll());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ApiResponse<Teacher>> getTeacherById(@PathVariable("id") Long id){
-        Optional<Teacher> teacher = teacherService.findById(id);
-        if (teacher.isPresent()){
-            return ResponseEntity.ok((ApiResponse.success(teacher.get())));
-        }else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<TeacherResponse> findById(@PathVariable Long id){
+        return teacherService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(()->ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Teacher>> create(@RequestBody Teacher teacher){
-        return ResponseEntity.ok(ApiResponse.success(teacherService.save(teacher)));
+    public ResponseEntity<TeacherResponse> create(@Valid @RequestBody TeacherUpsertRequest req){
+        return ResponseEntity.ok(teacherService.create(req));
     }
-    @PutMapping("{id}")
-    public ResponseEntity<ApiResponse<Teacher>> update(@PathVariable("id") Long id, @Valid @RequestBody Teacher teacher){
-        return ResponseEntity.ok(ApiResponse.success(teacherService.updateTeacher(id,teacher)));
+    @PutMapping("/{id}")
+    public ResponseEntity<TeacherResponse> update(@PathVariable Long id,@Valid @RequestBody TeacherUpsertRequest req){
+        return ResponseEntity.ok(teacherService.update(id,req));
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<ApiResponse<Void>> detele(@PathVariable("id") Long id){
-        teacherService.deleteTeacher(id);
-        return ResponseEntity.ok(ApiResponse.successMessage("Xoa Thanh cong"));
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException {
+        teacherService.delete(id);
+        return ResponseEntity.ok().build();
     }
 }
