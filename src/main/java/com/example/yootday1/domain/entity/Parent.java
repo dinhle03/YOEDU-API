@@ -1,9 +1,8 @@
 package com.example.yootday1.domain.entity;
 
 import com.example.yootday1.domain.AuditableEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.example.yootday1.domain.enums.Gender;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
@@ -26,6 +25,7 @@ public class Parent extends AuditableEntity {
     @Column(length = 20)
     private String relationship;
 
-    @Column(length = 10)
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
+    private Gender gender = Gender.OTHER;
 }

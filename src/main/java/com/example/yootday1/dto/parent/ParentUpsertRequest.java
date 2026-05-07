@@ -25,6 +25,5 @@ public class ParentUpsertRequest {
     @Size(max = 10)
     private String relationship;
     @NotNull
-    @Size(max = 10)
     private Gender gender = Gender.OTHER;
 }
